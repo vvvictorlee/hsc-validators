@@ -1,0 +1,71 @@
+consensus:POSA
+stake :10W HOO
+profit: TX fee
+https://hooscan.com/validatorset/snapshot/8640707
+67.683331144314547649/(8640707*3/(3600*24))   HOO/day
+
+Process:
+* Runtime env
+* HSC source code
+* build node
+* run node
+* Import PrivateKey
+* register validator
+* Create Proposal
+* Vote Proposal
+  * votes
+  * pass
+* Stake HOO
+* Start Mine 
+* Waiting 200 blocks  Became Active Validator
+* UnStake HOO
+Waiting 86400 blocks
+WithDraw  staking
+
+[Get Started](https://github.com/vvvictorlee/hsc-validators/blob/dev/README.md)
+github issue/ IM (TG/Discord)
+
+- [Consensus](#consensus)
+  - [Glossary](#glossary)
+  - [System contract](#system-contract)
+  - [Staking](#staking)
+  - [Punishment](#punishment)
+  
+
+# Consensus
+`HSC` adopts `PoSA` consensus mechanism with low transaction cost, low transaction latency, high transaction concurrency, and supports up to 21 validators.
+
+PoSA is a combination of PoA and Pos. To become a validator, you need to submit a proposal first and wait for other active validators to vote on it, after more than half of them pass, you will be eligible to become a validator. Any address can stake to an address that qualifies to become a validator, and after the validator's staking volume ranks in the top 21, it will become an active validator in the next epoch.
+
+
+All active verifiers are ordered according to predefined rules and take turns to pack out blocks. If a validator fails to pack out a block in time in its own round, the active validators who have not involved  in the past n/2 (n is the number of active validators) blocks will randomly perform the block-out. At least n/2+1 active validators work properly to ensure the proper operation of the blockchain.
+
+
+The difficulty value of a block is 2 when the block is generated normally and 1 when the block is not generated in a predefined order. when a fork of the block chain occurs, the block chain selects the corresponding fork according to the cumulative maximum difficulty.
+
+## Glossary 
+- validator. Responsible for packaging out blocks for on-chain transactions.
+- active validator. The current set of validators responsible for packing out blocks, with a maximum of 21.
+- epoch. Time interval in blocks, currently 1epoch = 200block on `HSC`. At the end of each epoch, the blockchain interacts with the system contracts to update active validators.
+
+## System contract
+[Hoo-contracts](https://github.com/hoosmartchain/hoo-contracts)
+
+The management of the current validators are all done by the system contracts.
+- Proposal  Responsible for managing access to validators and managing validator proposals and votes.
+- Validators Responsible for ranking management of validators, staking and unstaking operations, distribution of block rewards, etc..
+- Punish Responsible for punishing operations against active validators who are not working properly.
+
+Blockchain call system contracts：
+- At the end of each block, the `Validators` contract is called and the fees for all transactions in the block are distributed to active validators.
+- The `Punish` contract is called to punish the validator  when the validator is  not  working properly.
+- At the end of each epoch, the `Validators` contract is called to update active validators, based on the ranking.
+
+## Staking
+For any account, any number of coins can be staked to the validator, and the minimum staking amount for each validator is `32HOO`.
+If you want to unstake, you need to do the following:
+1. Send an unstaking transaction for a validator to the `Validators` contract;
+2. Waiting for `86400` blocks before sending a transaction to `Validators` contract to withdraw all staking coins on this validator;
+
+## Punishment
+Whenever a validator is found not to pack block as predefined, the `Punish` contract is automatically called at the end of this block and the validator is counted. When the count reaches 24, all income of the validator is punished. When the count reaches 48, the validator is removed from the list of active validators, and the validator is disqualified.
