@@ -1,8 +1,7 @@
-consensus:POSA
-stake :10W HOO
-profit: TX fee
-https://hooscan.com/validatorset/snapshot/8640707
-67.683331144314547649/(8640707*3/(3600*24))   HOO/day
+* consensus:POSA
+* stake :10W HOO
+* profit: TX fee
+* [history profit](https://hooscan.com/validatorset/snapshot/8640707 )    67.683331144314547649/(8640707*3/(3600*24))   HOO/day
 
 Process:
 * Runtime env
