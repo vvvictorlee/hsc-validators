@@ -27,7 +27,10 @@
   - [2. Create a new validator](#2-create-a-new-validator)
   - [Create a new proposal](#create-a-new-proposal)
   - [Vote on a proposal](#vote-on-a-proposal)
-  - [Stake HOO to a proposal](#stake-hoo-to-a-proposal)
+  - [Stake  HOO  to the validator](#stake--hoo--to-the-validator)
+  - [UnStake HOO](#unstake-hoo)
+  - [WithdrawStaking](#withdrawstaking)
+  - [Others](#others)
   
 # Build HSC Node
 
@@ -417,11 +420,48 @@ vci.createProposal.sendTransaction(eth.accounts[0], "details", {from: eth.accoun
 Voting is an important way for community members to help the HSC protocol evolve. Follow these steps to vote with your staked HOO.
 
 ```bash
-vci.createProposal.sendTransaction(eth.accounts[0], "details", {from: eth.accounts[0]})
+vci.voteProposal.sendTransaction(eth.accounts[0], "details", {from: eth.accounts[0]})
 
 ```
 
-## Stake HOO to a proposal
+## Stake  HOO  to the validator
+
+```bash
+vci.stake.sendTransaction(eth.accounts[1],eth.accounts[0], {from: eth.accounts[0]})
+
+```
+
+## UnStake HOO 
+
+```bash
+vci.unstake.sendTransaction(eth.accounts[0], {from: eth.accounts[0]})
+
+```
+
+## WithdrawStaking 
+
+```bash
+vci.withdrawStaking.sendTransaction(eth.accounts[0], {from: eth.accounts[0]})
+
+```
+
+## Others 
+
+```bash
+vci.withdrawProfits.sendTransaction(eth.accounts[0], {from: eth.accounts[0]})
 
 
+vc.getValidatorInfo.call('0x598feab9ff6a090a7faa9df0f3b4df3f0c8d35fc')
+
+vc.totalStake.call(eth.accounts[0])
+
+vc.getActiveValidators.call(eth.accounts[0])
+
+vc.staked.call(eth.accounts[0],eth.accounts[0])
+
+vc.votes.call(eth.accounts[0],1)   //1--proposal id
+vc.pass.call(eth.accounts[0])  
+
+
+```
 
